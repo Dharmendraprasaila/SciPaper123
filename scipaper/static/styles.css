@@ -1,47 +1,134 @@
+/* General Styles */
 body {
-    font-family: sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
-    padding: 20px;
-    background-color: #f4f4f9;
-}
-
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-h1 {
+    padding: 2rem;
+    background-color: #f0f2f5;
     color: #333;
 }
 
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: #1a237e;
+}
+
+/* Dashboard Layout */
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.panel {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.panel.full-width {
+    grid-column: 1 / -1;
+}
+
+.panel h2 {
+    margin-top: 0;
+    color: #3f51b5;
+    border-bottom: 2px solid #e8eaf6;
+    padding-bottom: 0.5rem;
+}
+
+/* Form Elements */
 .form-container {
-    margin-bottom: 20px;
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 input[type="text"], select {
-    padding: 10px;
-    margin-right: 10px;
+    flex-grow: 1;
+    padding: 0.75rem;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 8px;
+    font-size: 1rem;
 }
 
 button {
-    padding: 10px 15px;
-    background-color: #007bff;
+    padding: 0.75rem 1.5rem;
+    background-color: #3f51b5;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #303f9f;
 }
 
-#results-container {
-    margin-top: 20px;
+/* Status & Results */
+.status-message {
+    font-style: italic;
+    color: #555;
+}
+
+.results-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.results-list li {
+    padding: 0.75rem;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.results-list li:hover {
+    background-color: #e8eaf6;
+}
+
+/* Paper Details */
+#paper-details-container {
+    padding: 1rem;
+}
+
+#paper-details-container h3 {
+    color: #1a237e;
+}
+
+#paper-details-container button {
+    margin-top: 1rem;
+    background-color: #4caf50;
+}
+
+#paper-details-container button:hover {
+    background-color: #388e3c;
+}
+
+.analysis-section {
+    margin-top: 1rem;
+}
+
+.analysis-section h4 {
+    color: #3f51b5;
+}
+
+.analysis-section ul {
+    list-style: disc;
+    padding-left: 20px;
 }
