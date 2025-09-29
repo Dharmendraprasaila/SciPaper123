@@ -1,131 +1,184 @@
-/* General Styles */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --background-color: #ecf0f1;
+    --panel-bg-color: #ffffff;
+    --font-color: #34495e;
+    --border-color: #bdc3c7;
+    --success-color: #2ecc71;
+    --error-color: #e74c3c;
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    padding: 2rem;
-    background-color: #f0f2f5;
-    color: #333;
+    background-color: var(--background-color);
+    color: var(--font-color);
+}
+
+.navbar {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+}
+
+.navbar h1 {
+    margin: 0;
+    font-size: 1.5rem;
 }
 
 .container {
-    max-width: 1200px;
+    padding: 2rem;
+    max-width: 1400px;
     margin: 0 auto;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-header h1 {
-    font-size: 2.5rem;
-    color: #1a237e;
-}
-
-/* Dashboard Layout */
 .dashboard {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 2rem;
+    grid-template-areas:
+        "ingest search"
+        "details details";
 }
 
 .panel {
-    background: #fff;
+    background-color: var(--panel-bg-color);
+    border-radius: 8px;
     padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.panel.full-width {
-    grid-column: 1 / -1;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    display: flex;
+    flex-direction: column;
 }
 
 .panel h2 {
     margin-top: 0;
-    color: #3f51b5;
-    border-bottom: 2px solid #e8eaf6;
-    padding-bottom: 0.5rem;
-}
-
-/* Form Elements */
-.form-container {
-    display: flex;
-    gap: 0.5rem;
+    color: var(--primary-color);
+    font-size: 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
     margin-bottom: 1rem;
 }
 
-input[type="text"], select {
-    flex-grow: 1;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+#panel-ingest { grid-area: ingest; }
+#panel-search { grid-area: search; }
+#panel-details { grid-area: details; }
+
+.form-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+input, select, button {
+    padding: 0.8rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
     font-size: 1rem;
 }
 
+input, select {
+    flex-grow: 1;
+}
+
 button {
-    padding: 0.75rem 1.5rem;
-    background-color: #3f51b5;
+    background-color: var(--secondary-color);
     color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
     font-weight: bold;
-    transition: background-color 0.2s;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
 button:hover {
-    background-color: #303f9f;
+    background-color: #2980b9;
 }
 
-/* Status & Results */
-.status-message {
-    font-style: italic;
-    color: #555;
+.results-list {
+    margin-top: 1rem;
+    flex-grow: 1;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
 }
 
 .results-list ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    max-height: 200px;
-    overflow-y: auto;
 }
 
 .results-list li {
-    padding: 0.75rem;
-    border-bottom: 1px solid #eee;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border-color);
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s ease;
+}
+
+.results-list li:last-child {
+    border-bottom: none;
 }
 
 .results-list li:hover {
-    background-color: #e8eaf6;
+    background-color: #f2f2f2;
 }
 
-/* Paper Details */
+.status-message {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    border-radius: 6px;
+    display: none; /* Hidden by default */
+}
+
+.status-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    display: block;
+}
+
+.status-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    display: block;
+}
+
+.status-message.loading {
+    background-color: #e2e3e5;
+    color: #383d41;
+    display: block;
+}
+
 #paper-details-container {
-    padding: 1rem;
+    flex-grow: 1;
+}
+
+#paper-details-container .placeholder {
+    color: #7f8c8d;
 }
 
 #paper-details-container h3 {
-    color: #1a237e;
+    color: var(--primary-color);
 }
 
 #paper-details-container button {
     margin-top: 1rem;
-    background-color: #4caf50;
+    background-color: var(--success-color);
 }
 
 #paper-details-container button:hover {
-    background-color: #388e3c;
+    background-color: #27ae60;
 }
 
 .analysis-section {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
 }
 
 .analysis-section h4 {
-    color: #3f51b5;
+    color: var(--primary-color);
 }
 
 .analysis-section ul {

@@ -7,14 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const ingestQuery = document.getElementById('ingest-query');
     const ingestSource = document.getElementById('ingest-source');
     const searchQuery = document.getElementById('search-query');
-    const collabQuery = document.getElementById('collab-query');
 
     const ingestStatus = document.getElementById('ingest-status');
     const searchResults = document.getElementById('search-results');
     const collabResults = document.getElementById('collab-results');
     const paperDetailsContainer = document.getElementById('paper-details-container');
-
-    let papersData = []; // To store search results
 
     // --- API Helper ---
     async function apiFetch(url, options = {}) {
@@ -31,6 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- Status Update Helper ---
+    function showStatus(element, message, type) {
+        element.textContent = message;
+        element.className = 'status-message'; // Reset classes
+        element.classList.add(type);
+    }
+
     // --- Event Listeners ---
     ingestBtn.addEventListener('click', handleIngest);
     searchBtn.addEventListener('click', handleSearch);
@@ -41,16 +45,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const query = ingestQuery.value.trim();
         const source = ingestSource.value;
         if (!query) {
-            ingestStatus.textContent = 'Please enter a topic to ingest.';
+            showStatus(ingestStatus, 'Please enter a topic to ingest.', 'error');
             return;
         }
 
-        ingestStatus.textContent = `🔄 Ingesting papers on '${query}' from ${source}...`;
+        showStatus(ingestStatus, `🔄 Ingesting papers on '${query}'...`, 'loading');
         try {
             const data = await apiFetch(`/api/v1/ingest/?query=${encodeURIComponent(query)}&source=${source}`, { method: 'POST' });
-            ingestStatus.textContent = `✅ Successfully ingested ${data.length} paper(s).`;
+            showStatus(ingestStatus, `✅ Successfully ingested ${data.length} paper(s).`, 'success');
         } catch (error) {
-            ingestStatus.textContent = `❌ Error: ${error.message}`;
+            showStatus(ingestStatus, `❌ Error: ${error.message}`, 'error');
         }
     }
 
@@ -63,17 +67,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         searchResults.innerHTML = '<p>🔍 Searching...</p>';
         try {
-            papersData = await apiFetch(`/api/v1/search/?query=${encodeURIComponent(query)}`);
-            renderSearchResults(papersData);
+            const papers = await apiFetch(`/api/v1/search/?query=${encodeURIComponent(query)}`);
+            renderSearchResults(papers);
         } catch (error) {
             searchResults.innerHTML = `<p>❌ Error: ${error.message}</p>`;
         }
     }
 
     async function handleCollabSearch() {
-        const query = collabQuery.value.trim();
+        const query = ingestQuery.value.trim(); // Use the same query as ingest
         if (!query) {
-            collabResults.innerHTML = '<p>Please enter a topic.</p>';
+            showStatus(ingestStatus, 'Please enter a topic to find collaborators.', 'error');
             return;
         }
 
@@ -88,12 +92,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function handleAnalyze(paperId) {
         const container = document.getElementById('ai-analysis-results');
-        container.innerHTML = '<p>🧠 Analyzing with AI...</p>';
+        container.innerHTML = '<p class="status-message loading">🧠 Analyzing with AI...</p>';
         try {
             const data = await apiFetch(`/api/v1/analyze/${paperId}`, { method: 'POST' });
             renderAnalysisResults(data);
         } catch (error) {
-            container.innerHTML = `<p>❌ AI Analysis Error: ${error.message}</p>`;
+            container.innerHTML = `<p class="status-message error">❌ AI Analysis Error: ${error.message}</p>`;
         }
     }
 
@@ -104,11 +108,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         const ul = document.createElement('ul');
-        papers.forEach((paper, index) => {
+        papers.forEach(paper => {
             const li = document.createElement('li');
             li.textContent = paper.title;
-            li.dataset.index = index;
-            li.addEventListener('click', () => renderPaperDetails(papers[index]));
+            li.addEventListener('click', () => renderPaperDetails(paper));
             ul.appendChild(li);
         });
         searchResults.innerHTML = '';
@@ -147,15 +150,15 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = `
             <div class="analysis-section">
                 <h4>Key Findings</h4>
-                <ul>${analysis.findings.map(f => `<li>${f}</li>`).join('')}</ul>
+                <ul>${(analysis.findings || []).map(f => `<li>${f}</li>`).join('')}</ul>
             </div>
             <div class="analysis-section">
                 <h4>Methods Used</h4>
-                <ul>${analysis.methods.map(m => `<li>${m}</li>`).join('')}</ul>
+                <ul>${(analysis.methods || []).map(m => `<li>${m}</li>`).join('')}</ul>
             </div>
             <div class="analysis-section">
                 <h4>Research Gaps</h4>
-                <ul>${analysis.gaps.map(g => `<li>${g}</li>`).join('')}</ul>
+                <ul>${(analysis.gaps || []).map(g => `<li>${g}</li>`).join('')}</ul>
             </div>
         `;
     }

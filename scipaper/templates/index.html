@@ -3,34 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SciPaper Dashboard</title>
+    <title>SciPaper - AI Research Assistant</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🔬 SciPaper Dashboard</h1>
-            <p>Your AI-Powered Research Assistant</p>
-        </header>
+    <nav class="navbar">
+        <h1>🔬 SciPaper</h1>
+    </nav>
 
+    <div class="container">
         <main class="dashboard">
-            <!-- Ingestion Panel -->
-            <section class="panel">
-                <h2>🔄 Ingest New Papers</h2>
+            <!-- Ingestion & Collaboration Panel -->
+            <section class="panel" id="panel-ingest">
+                <h2>🔄 Ingest & Find Collaborators</h2>
                 <div class="form-container">
-                    <input type="text" id="ingest-query" placeholder="Enter topic to ingest...">
+                    <input type="text" id="ingest-query" placeholder="Enter a topic...">
                     <select id="ingest-source">
                         <option value="pubmed">PubMed</option>
                         <option value="arxiv">arXiv</option>
                     </select>
-                    <button id="ingest-btn">Ingest</button>
+                </div>
+                <div class="form-container">
+                    <button id="ingest-btn" style="flex: 1;">Ingest New Papers</button>
+                    <button id="collab-btn" style="flex: 1;">Find Collaborators</button>
                 </div>
                 <div id="ingest-status" class="status-message"></div>
+                 <div id="collab-results" class="results-list"></div>
             </section>
 
-            <!-- Search and View Panel -->
-            <section class="panel">
-                <h2>🔍 Search & Analyze</h2>
+            <!-- Search Panel -->
+            <section class="panel" id="panel-search">
+                <h2>🔍 Search Local Database</h2>
                 <div class="form-container">
                     <input type="text" id="search-query" placeholder="Search ingested papers...">
                     <button id="search-btn">Search</button>
@@ -38,23 +41,16 @@
                 <div id="search-results" class="results-list"></div>
             </section>
 
-            <!-- Collaboration Panel -->
-            <section class="panel">
-                <h2>🤝 Find Collaborators</h2>
-                <div class="form-container">
-                    <input type="text" id="collab-query" placeholder="Enter topic to find experts...">
-                    <button id="collab-btn">Find</button>
-                </div>
-                <div id="collab-results" class="results-list"></div>
-            </section>
-
-            <!-- Paper Details and Analysis Panel -->
-            <section class="panel full-width">
+            <!-- Paper Details Panel -->
+            <section class="panel" id="panel-details">
                 <h2>📄 Paper Details & AI Analysis</h2>
-                <div id="paper-details-container">Select a paper from the search results to view its details.</div>
+                <div id="paper-details-container">
+                    <p class="placeholder">Select a paper from the search results to view its details and trigger AI analysis.</p>
+                </div>
             </section>
         </main>
     </div>
+
     <script src="/static/main.js"></script>
 </body>
 </html>
