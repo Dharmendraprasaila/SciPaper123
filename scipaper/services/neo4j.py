@@ -36,13 +36,20 @@ class Neo4jService:
                            doi=paper.doi, name=author_name)
 
 # Initialize the Neo4j service
-neo4j_service = Neo4jService(settings.neo4j_uri, settings.neo4j_username, settings.neo4j_password)
+neo4j_service = None
+
+def get_neo4j_service():
+    global neo4j_service
+    if neo4j_service is None:
+        neo4j_service = Neo4jService(settings.neo4j_uri, settings.neo4j_username, settings.neo4j_password)
+    return neo4j_service
 
 # You can also add a function to get collaboration suggestions
 def get_collaboration_suggestions(topic: str):
     # This is a placeholder for a more complex query
     # For now, we'll just return a list of authors who have written about the topic
-    with neo4j_service._driver.session() as session:
+    service = get_neo4j_service()
+    with service._driver.session() as session:
         result = session.run("MATCH (a:Author)-[:AUTHORED]->(p:Paper) "
                              "WHERE toLower(p.title) CONTAINS toLower($topic) "
                              "RETURN a.name as author, count(p) as papers "

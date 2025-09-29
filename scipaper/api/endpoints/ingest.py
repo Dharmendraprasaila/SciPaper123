@@ -45,7 +45,8 @@ async def ingest_papers(query: str, source: str, max_results: int = 10, db: Sess
         paper_in = schemas.PaperCreate(**paper_data)
         created_paper = crud.create_paper(db=db, paper=paper_in)
         elasticsearch.index_paper(created_paper)
-        neo4j.neo4j_service.add_paper_and_authors(created_paper)
+        neo4j_service = neo4j.get_neo4j_service()
+        neo4j_service.add_paper_and_authors(created_paper)
         created_papers.append(created_paper)
     
     logging.info(f"Successfully ingested and processed {len(created_papers)} papers.")

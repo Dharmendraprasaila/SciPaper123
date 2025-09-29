@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         papers.forEach(paper => {
             const li = document.createElement('li');
             li.textContent = paper.title;
+            // The 'id' is directly available in the Elasticsearch result
             li.addEventListener('click', () => renderPaperDetails(paper));
             ul.appendChild(li);
         });
