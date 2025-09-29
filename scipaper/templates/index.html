@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SciPaper - AI Research Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
@@ -17,7 +20,7 @@
             <section class="panel" id="panel-ingest">
                 <h2>🔄 Ingest & Find Collaborators</h2>
                 <div class="form-container">
-                    <input type="text" id="ingest-query" placeholder="Enter a topic...">
+                    <input type="text" id="ingest-query" placeholder="Enter a topic (e.g., 'quantum computing')...">
                     <select id="ingest-source">
                         <option value="pubmed">PubMed</option>
                         <option value="arxiv">arXiv</option>
@@ -28,7 +31,7 @@
                     <button id="collab-btn" style="flex: 1;">Find Collaborators</button>
                 </div>
                 <div id="ingest-status" class="status-message"></div>
-                 <div id="collab-results" class="results-list"></div>
+                <div id="collab-results" class="results-list"></div>
             </section>
 
             <!-- Search Panel -->
