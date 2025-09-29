@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await apiFetch(`/api/v1/analyze/${paperId}`, { method: 'POST' });
             renderAnalysisResults(data);
         } catch (error) {
-            container.innerHTML = `<p class="status-message error">❌ AI Analysis Error: ${error.message}</p>`;
+            container.innerHTML = `<p class="status-message error">AI Analysis Error: ${error.message}</p>`;
         }
     }
 
@@ -111,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
         papers.forEach(paper => {
             const li = document.createElement('li');
             li.textContent = paper.title;
-            // The 'id' is directly available in the Elasticsearch result
             li.addEventListener('click', () => renderPaperDetails(paper));
             ul.appendChild(li);
         });
