@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SciPaper</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>SciPaper</h1>
+        <div class="form-container">
+            <input type="text" id="query" placeholder="Enter your query">
+            <select id="source">
+                <option value="pubmed">PubMed</option>
+                <option value="arxiv">arXiv</option>
+            </select>
+            <button id="ingest-btn">Ingest Papers</button>
+        </div>
+        <div id="results-container"></div>
+    </div>
+    <script src="/static/main.js"></script>
+</body>
+</html>
