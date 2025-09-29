@@ -3,15 +3,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const ingestBtn = document.getElementById('ingest-btn');
     const searchBtn = document.getElementById('search-btn');
     const collabBtn = document.getElementById('collab-btn');
+    const uploadBtn = document.getElementById('upload-btn');
 
     const ingestQuery = document.getElementById('ingest-query');
     const ingestSource = document.getElementById('ingest-source');
     const searchQuery = document.getElementById('search-query');
+    const pdfFileInput = document.getElementById('pdf-file-input');
 
     const ingestStatus = document.getElementById('ingest-status');
     const searchResults = document.getElementById('search-results');
     const collabResults = document.getElementById('collab-results');
     const paperDetailsContainer = document.getElementById('paper-details-container');
+    const uploadStatus = document.getElementById('upload-status');
 
     // --- API Helper ---
     async function apiFetch(url, options = {}) {
@@ -39,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ingestBtn.addEventListener('click', handleIngest);
     searchBtn.addEventListener('click', handleSearch);
     collabBtn.addEventListener('click', handleCollabSearch);
+    uploadBtn.addEventListener('click', handleUpload);
 
     // --- Handlers ---
     async function handleIngest() {
@@ -90,6 +94,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    async function handleUpload() {
+        const file = pdfFileInput.files[0];
+        if (!file) {
+            showStatus(uploadStatus, 'Please select a PDF file to upload.', 'error');
+            return;
+        }
+
+        const lastSearchResult = document.querySelector('#search-results li');
+        if (!lastSearchResult) {
+            showStatus(uploadStatus, 'Please search for a paper first to associate the PDF with.', 'error');
+            return;
+        }
+        const paperId = lastSearchResult.dataset.id;
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        showStatus(uploadStatus, `🔄 Uploading '${file.name}'...`, 'loading');
+        try {
+            const data = await apiFetch(`/api/v1/files/${paperId}/upload-pdf`, {
+                method: 'POST',
+                body: formData
+            });
+            showStatus(uploadStatus, `✅ ${data.message}`, 'success');
+        } catch (error) {
+            showStatus(uploadStatus, `❌ Error: ${error.message}`, 'error');
+        }
+    }
+
     async function handleAnalyze(paperId) {
         const container = document.getElementById('ai-analysis-results');
         container.innerHTML = '<p class="status-message loading">🧠 Analyzing with AI...</p>';
@@ -97,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await apiFetch(`/api/v1/analyze/${paperId}`, { method: 'POST' });
             renderAnalysisResults(data);
         } catch (error) {
-            container.innerHTML = `<p class="status-message error">AI Analysis Error: ${error.message}</p>`;
+            container.innerHTML = `<p class="status-message error">❌ AI Analysis Error: ${error.message}</p>`;
         }
     }
 
@@ -111,6 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         papers.forEach(paper => {
             const li = document.createElement('li');
             li.textContent = paper.title;
+            li.dataset.id = paper.id;
             li.addEventListener('click', () => renderPaperDetails(paper));
             ul.appendChild(li);
         });
